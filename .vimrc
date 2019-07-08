@@ -15,6 +15,8 @@ set gdefault
 set incsearch
 set showmatch
 set hlsearch
+"позволяет вводить LTR-языки, напр. иврит, с помощью <C-_>:
+set allowrevins
 " vim не требует сохранять буфер при переключении:
 set hidden
 "set path+=**
@@ -41,6 +43,19 @@ set wildmenu
 set laststatus=2
 "set statusline=%<%f\ [%Y%R%W]%1*%{(&modified)?'\ [+]\ ':''}%*%=%c%V,%l\ %P\ [%n]
 
+nnoremap <Space> <nop>
+let mapleader = "\<Space>"
+
+" Source the vimrc file after saving it
+if has("autocmd")
+	autocmd bufwritepost .vimrc source $MYVIMRC
+endif
+nmap <leader>v :edit $MYVIMRC<CR>
+
+" linebreak:
+command! -nargs=* Wrap set wrap linebreak nolist
+
+"}}}
 "{{{{---- NEW HIGHLIGHTS KEYWORDS
 "syntax match markdownQuote "\[@[^\]]\+\]"
 highlight markdownQuote term=bold cterm=NONE ctermfg=White ctermbg=Black gui=NONE guifg=DarkGrey guibg=NONE
@@ -70,20 +85,6 @@ if has("autocmd")
 	augroup END
 endif
 "}}}}
-
-nnoremap <Space> <nop>
-let mapleader = "\<Space>"
-
-" Source the vimrc file after saving it
-if has("autocmd")
-	autocmd bufwritepost .vimrc source $MYVIMRC
-endif
-nmap <leader>v :edit $MYVIMRC<CR>
-
-" linebreak:
-command! -nargs=* Wrap set wrap linebreak nolist
-
-"}}}
 "{{{VARIOUS IMPROVEMENTS (MINE)= = = = = = = = = = = = = = = = = = = = = = = =
 "==================================================
 nnoremap <space><space> :noh<cr>
@@ -156,19 +157,29 @@ au BufRead,BufNewFile *.md syntax match StrikeoutMatch '\~\~.*\~\~'
 "au BufRead,BufNewFile *.md syntax match muspieces '--.*/'
 "au BufRead,BufNewFile *.md syntax match images '<).*/'
 
+"syntax highlighting inside code-blocks!
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
+"""Не работает, нет у меня такого синтакса:(
+let g:markdown_fenced_languages = ['table=csv']
+
 "MARKDOWN MAPPINGS
 "comments 
-inoremap <Leader><! <!---<Space><++><Space>-->
+inoremap <Leader><! <!---<Space><Space>--><esc>3hi
+"ditto unicode
+inoremap -@- `–〃–`
+"images
 inoremap m;i ![]()<Left>
+"bold
 inoremap <C-b> ****<Esc>hi
-
-" markdown folding
+"MARKDOWN FOLDING
 set nocompatible
     if has("autocmd")
       filetype plugin indent on
     endif
 
 let g:markdown_fold_style= 'nested'
+
+xnoremap <expr> ! mode() ==# "V" ? "I<!--\<Esc>gv\<Esc>o-->\<Esc>" : "commented"
 
 "}}}
 "{{{ TABLES
@@ -393,6 +404,16 @@ map <Leader>ll :w<CR>:silent VimtexView<CR>
 nnoremap <Leader>pt :! pandoc -f markdown -t latex --biblatex --wrap=preserve --top-level-division=chapter -o %:p:r.tex %
 " КОНВЕРТАЦИЯ НЕСКОЛЬКИХ ФАЙЛОВ ИЗ .md в latex
 " for f in *.md ; do pandoc ${f} -f markdown -t latex --biblatex --wrap=preserve --top-level-division=chapter -s -o ${f/.md/}.tex  ; done
+"nnoremap <Leader>pw :! pandoc --filter pandoc-crossref --filter pandoc-citeproc --bibliography=/Users/mac/Dropbox/Apps/neutriNote/bib/Aspiro_1.7.bib --smart --normalize -o %:p:r.docx %
+nnoremap <Leader>pwe :! pandoc --filter pandoc-crossref --filter pantable --filter pandoc-citeproc --bibliography=/Users/mac/Dropbox/Apps/neutriNote/bib/Aspiro_1.8.bib --reference-doc /Users/mac/Dropbox/Apps/neutriNote/Aspiro/demo-template-report_mine.docx -f markdown+smart -t docx+styles -s --csl /Users/mac/Dropbox/Apps/neutriNote/css/chicago-fullnote-bibliography-with-ibid.csl -o /Users/mac/Documents/%:r.docx % /Users/mac/Dropbox/Apps/neutriNote/Aspiro/dis_4.0/md-gost.yaml
+nnoremap <Leader>pwr :! pandoc --filter pandoc-crossref --filter pantable --filter pandoc-citeproc --bibliography=/Users/mac/Dropbox/Apps/neutriNote/bib/Aspiro_1.8.bib --reference-doc /Users/mac/Dropbox/Apps/neutriNote/Aspiro/demo-template-report_mine.docx -f markdown+smart -t docx+styles -s --csl /Users/mac/Downloads/GOST-styles-for-Zotero/gost-r-7-0-5-2008-footnote-appear.csl -o /Users/mac/Documents/%:r.docx % /Users/mac/Dropbox/Apps/neutriNote/Aspiro/dis_4.0/md-gost.yaml
+""" ЭТО ДЛЯ thesis:
+nnoremap <Leader>pwf :! pandoc --filter pandoc-crossref --filter pantable --filter pandoc-citeproc --bibliography=/Users/mac/Dropbox/Apps/neutriNote/bib/Aspiro_1.8.bib --reference-doc /Users/mac/Dropbox/Apps/neutriNote/Aspiro/demo-template-report_mine.docx -f markdown+smart -t docx -s --csl /Users/mac/Dropbox/Apps/neutriNote/csl/gost-r-7-0-5-2008-foot-alphab-ru-en.csl -o /Users/mac/Documents/%:r.docx % /Users/mac/Dropbox/Apps/neutriNote/Aspiro/md-gost_thesis.yaml
+nnoremap <Leader>pwn :! pandoc --filter pandoc-crossref --filter pantable --filter pandoc-citeproc --bibliography=/Users/mac/Dropbox/Apps/neutriNote/bib/Aspiro_1.8.bib --reference-doc /Users/mac/Dropbox/Apps/neutriNote/Aspiro/demo-template-report_mine.docx -f markdown+smart -t docx -s --csl /Users/mac/Dropbox/Apps/neutriNote/csl/gost-r-7-0-5-2008-numeric-alphab-ru-en.csl -o /Users/mac/Documents/%:r.docx % /Users/mac/Dropbox/Apps/neutriNote/Aspiro/md-gost_article.yaml
+nnoremap <Leader>pwa :! pandoc --filter pandoc-crossref --filter pantable --filter pandoc-citeproc --bibliography=/Users/mac/Dropbox/Apps/neutriNote/bib/Aspiro_1.8.bib --reference-doc /Users/mac/Dropbox/Apps/neutriNote/Aspiro/demo-template-report_mine.docx -f markdown+smart -t docx -s --csl /Users/mac/Dropbox/Apps/neutriNote/csl/gost-r-7-0-5-2008-numeric-appear-ru-en.csl -o /Users/mac/Documents/%:r.docx % /Users/mac/Dropbox/Apps/neutriNote/Aspiro/md-gost_article.yaml
+""" создание транслит. библиографии в стиле Chicago
+nnoremap <Leader>pwE :! pandoc --filter pandoc-crossref --filter pantable --filter pandoc-citeproc --bibliography=/Users/mac/Dropbox/Apps/neutriNote/bib/Aspiro_1.8TRNSL.bib --reference-doc /Users/mac/Dropbox/Apps/neutriNote/Aspiro/demo-template-report_mine.docx -f markdown+smart -t docx -s --csl /Users/mac/Dropbox/Apps/neutriNote/css/chicago-fullnote-bibliography-with-ibid_ORIG.csl -o /Users/mac/Documents/%:reng.docx % /Users/mac/Dropbox/Apps/neutriNote/Aspiro/md-gost_article.yaml
+"nnoremap <Leader>pw :! pandoc --filter pandoc-crossref --filter pandoc-citeproc --bibliography=/Users/mac/Dropbox/Apps/neutriNote/bib/Aspiro_1.7.bib --reference-doc /Users/mac/Dropbox/Apps/neutriNote/Aspiro/demo-template-report_mine.docx --smart --normalize  -s --csl /Users/mac/Dropbox/Apps/neutriNote/bib/GOST-R-7_0_11-2011_-_numeric_-_alphabetic.csl -o %:p:r.docx % /Users/mac/Dropbox/Apps/neutriNote/Aspiro/dis_4.0/md-gost.yaml
 
 "biblatex конвертирует биб.ссылки типа [@...];
 "wrap=preserve оставляет soft-linebreaks в файле, чтобы его удобно было редактировать в vim;
@@ -556,14 +577,31 @@ let g:airline#extensions#tabline#enabled = 1
 
 
 "-----STARTIFY PLUGIN
-    let g:startify_custom_header = [
-            \ '                                 ________  __ __        ',
-            \ '            __                  /\_____  \/\ \\ \       ',
-            \ '    __  __ /\_\    ___ ___      \/___//''/''\ \ \\ \    ',
-            \ '   /\ \/\ \\/\ \ /'' __` __`\        /'' /''  \ \ \\ \_ ',
-            \ '   \ \ \_/ |\ \ \/\ \/\ \/\ \      /'' /''__  \ \__ ,__\',
-            \ '    \ \___/  \ \_\ \_\ \_\ \_\    /\_/ /\_\  \/_/\_\_/  ',
-            \ '     \/__/    \/_/\/_/\/_/\/_/    \//  \/_/     \/_/    ',
+"    let g:startify_custom_header = [
+"            \ '                                 ________  __ __        ',
+"            \ '            __                  /\_____  \/\ \\ \       ',
+"            \ '    __  __ /\_\    ___ ___      \/___//''/''\ \ \\ \    ',
+"            \ '   /\ \/\ \\/\ \ /'' __` __`\        /'' /''  \ \ \\ \_ ',
+"            \ '   \ \ \_/ |\ \ \/\ \/\ \/\ \      /'' /''__  \ \__ ,__\',
+"            \ '    \ \___/  \ \_\ \_\ \_\ \_\    /\_/ /\_\  \/_/\_\_/  ',
+"            \ '     \/__/    \/_/\/_/\/_/\/_/    \//  \/_/     \/_/    ',
+"\ ]
+
+let g:startify_custom_header = [
+             \ '    ___======____=---=)                         ',
+             \ '  /T            \_--===)                        ',
+             \ '  [ \ (0)   \~    \_-==)                        ',
+             \ '   \      / )J~~    \-=)                        ',
+             \ '    \\\\___/  )JJ~~~   \)                       ',
+             \ '     \_____/JJ~~~~~    \\                       ',
+             \ '     / \  , \J~~~~~     \\			',
+             \ '   (-\)\=|\\\\\~~~~       L__                   ',
+             \ '   (\\\\)  (\\\\\)_           \==__             ',
+             \ '    \V    \\\\\) ===_____   \\\\\\\\\\\\        ',
+             \ '           \V)     \_) \\\\\\\\JJ\J\)           ',
+             \ '                       /J\JT\JJJJ)              ',
+             \ '                       (JJJ| \UUU)              ',
+             \ '                        (UU)			',
 \ ]
 
 cnoreabbrev s Startify

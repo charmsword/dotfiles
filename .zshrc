@@ -125,19 +125,27 @@ alias cfn='vim ~/.ncmpcpp/config'
 alias cfz='vim ~/.zshrc'
 alias cfs='vim ~/.slate'
 alias cfm='vim ~/.config/mc/ini'
+alias cfabl='vim /Users/mac/Library/Preferences/Ableton/Live\ 9.2.3/options.txt'
 
-# APPS
+# CLI APPS
 alias mus='ncmpcpp'
 alias r='ranger'
-alias ydl='youtube-dl --extract-audio --audio-format mp3'
+alias ydl='youtube-dl --no-playlist --extract-audio --audio-format mp3'
+alias vims='sudo vim'
 alias мшь='vim'
 alias f='open -a Finder .'
 alias myip="curl http://myip.dnsomatic.com && echo ''"
 #alias ctags="/usr/local/bin/ctags"
+alias wgeth='wget --html-extension --page-requisites'
+alias pandoch='pandoc -f html -t epub3'
+alias beets='beet'
 
 # FILEWORKS
 alias greml='grep -E -o "\b[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+\b"' # *.md >> file.md
-alias grek='grep -E -o "[0-9a-zA-Z-]+\.[0-9a-zA-Z-]+\.[0-9]+" ~/Dropbox/Apps/neutriNote/bib/Aspiro_1.7.bib | sort | uniq > ~/.vim/keywords.txt && rg -oN --no-filename "\{\#[^\d|\#|}]+\}" ~/Dropbox/Apps/neutriNote/Aspiro/dis_4.0/* | sed s/#// | sort | uniq > ~/.vim/references.txt'
+#alias grek='grep -E -o "[0-9a-zA-Z-]+\.[0-9a-zA-Z-]+\.[0-9]+" ~/Dropbox/Apps/neutriNote/bib/Aspiro_1.8.bib | sort | uniq > ~/.vim/keywords.txt'
+
+alias grek='grep -E -o "[0-9a-zA-Z-]+\.[0-9a-zA-Z-]+\.[0-9]+" ~/Dropbox/Apps/neutriNote/bib/Aspiro_1.8.bib | sort | uniq > ~/.vim/keywords.txt && rg -oN --no-filename "\{\#[^\d|\#|}]+\}" ~/Dropbox/Apps/neutriNote/Aspiro/dis_4.0/* | sed s/#// | sort | uniq > ~/.vim/references.txt'
+
 alias awtime='awk -F "," "{print \$2,\$5,\$4,\$8, \$9, \$10, \$11,\$12}"'
 
 ### alias t='tagedit.sh "$@"'
@@ -176,7 +184,12 @@ function g.() { grep "$1" ${@:2} -R . }
 
 # CONSOLE COMMANDS
 alias d.="du -h . | grep '[0-9\,]\+G'"
-function s() { pwd > ~/.save_dir ; }
+function s() { pwd > ~/.save_dir }
+
+alias vrf="/Users/mac/bin/vrf"
+
+# CONVERTING IMAGES
+alias png2tiff='for f in *.png; do convert "$f" "${f%%.*}.tiff"; done'
 
 # CONVERTING MUSIC AND AUDIO:
 function 2mp3() { ffmpeg -i "$1" -ab 320k "${@:2}" }
@@ -242,4 +255,42 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 #alias mdm="ranNum=$[RANDOM%998+1] bash -c 'vim ~/Dropbox/Apps/neutriNote/Appr/letters/letter_$ranNum.md'"
 #alias mdm="ranNum=$(date +%S%N) vim ~/Dropbox/Apps/neutriNote/Appr/letters/letter_$ranNum.md"
 #alias mdm="vim ~/Dropbox/Apps/neutriNote/Appr/letters/letter`date +"%S%N"`.md"
-alias mdm="vim ~/Dropbox/Apps/neutriNote/Appr/letters/letter_$RANDOM.md && exec $SHELL"
+alias mdm="vim ~/Dropbox/Apps/neutriNote/Appr/letters/letter_`date +%F`._$RANDOM.md && exec $SHELL"
+
+# SOX
+snorm() {
+	for file in *.*; do
+		sox $file --norm=-0.1 ./NORM$file -V;
+	done
+}
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+
+# RTM-CLI
+alias rtm="rtm --completed false"
+
+# ConCATenate  * >> disserFull
+alias ciss="cat /Users/mac/Dropbox/Apps/neutriNote/Aspiro/dis_5.0/{1..4}* > /Users/mac/Dropbox/Apps/neutriNote/Aspiro/dis_5.0/disserFull_1.2.md"
+
+# textcleaner script
+alias txcl="~/bin/textcleaner.sh"
+
+# fish logo (not working)
+logo() {
+    echo "                 '(set_color F00)'___
+  ___======____='(set_color FF7F00)'-'(set_color FF0)'-'(set_color FF7F00)'-='(set_color F00)')
+/T            \_'(set_color FF0)'--='(set_color FF7F00)'=='(set_color F00)')
+[ \ '(set_color FF7F00)'('(set_color FF0)'0'(set_color FF7F00)')   '(set_color F00)'\~    \_'(set_color FF0)'-='(set_color FF7F00)'='(set_color F00)')
+ \      / )J'(set_color FF7F00)'~~    \\'(set_color FF0)'-='(set_color F00)')
+  \\\\___/  )JJ'(set_color FF7F00)'~'(set_color FF0)'~~   '(set_color F00)'\)
+   \_____/JJJ'(set_color FF7F00)'~~'(set_color FF0)'~~    '(set_color F00)'\\
+   '(set_color FF7F00)'/ '(set_color FF0)'\  '(set_color FF0)', \\'(set_color F00)'J'(set_color FF7F00)'~~~'(set_color FF0)'~~     '(set_color FF7F00)'\\
+  (-'(set_color FF0)'\)'(set_color F00)'\='(set_color FF7F00)'|'(set_color FF0)'\\\\\\'(set_color FF7F00)'~~'(set_color FF0)'~~       '(set_color FF7F00)'L_'(set_color FF0)'_
+  '(set_color FF7F00)'('(set_color F00)'\\'(set_color FF7F00)'\\)  ('(set_color FF0)'\\'(set_color FF7F00)'\\\)'(set_color F00)'_           '(set_color FF0)'\=='(set_color FF7F00)'__
+   '(set_color F00)'\V    '(set_color FF7F00)'\\\\'(set_color F00)'\) =='(set_color FF7F00)'=_____   '(set_color FF0)'\\\\\\\\'(set_color FF7F00)'\\\\
+          '(set_color F00)'\V)     \_) '(set_color FF7F00)'\\\\'(set_color FF0)'\\\\JJ\\'(set_color FF7F00)'J\)
+                      '(set_color F00)'/'(set_color FF7F00)'J'(set_color FF0)'\\'(set_color FF7F00)'J'(set_color F00)'T\\'(set_color FF7F00)'JJJ'(set_color F00)'J)
+                      (J'(set_color FF7F00)'JJ'(set_color F00)'| \UUU)
+                       (UU)'(set_color normal) "
+	       }
