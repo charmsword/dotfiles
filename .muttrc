@@ -1,0 +1,52 @@
+set imap_user = "charmsword@gmail.com"
+set imap_pass = "VladimirPlatanovBloom17"
+set smtp_url = "smtp://charmsword@smtp.gmail.com:587/"
+set smtp_pass = "VladimirPlatanovBloom17"
+set from = "charmsword@gmail.com"
+set realname = "Alexander Tavrizyan"
+set folder = "imaps://imap.gmail.com:993"
+set spoolfile = "+INBOX"
+set record = "+Sent"
+set trash = "+Trash"
+set postponed = "+[Gmail]/Drafts"
+set header_cache = ~/.mutt/cache/headers
+set message_cachedir = ~/.mutt/cache/bodies
+set certificate_file = ~/.mutt/certificates
+set move = no
+set smtp_authenticators = 'gssapi:login'
+
+mailboxes =INBOX =Sent =Trash =Drafts
+
+source ~/.mutt/mutt-colors-solarized/mutt-colors-solarized-light-16.muttrc
+
+#Specifies time, in seconds, to pause while displaying certain informational messages, while moving from folder to folder and after expunging messages from the current folder. The default is to pause one second, so a value of zero for this option suppresses the pause.
+set sleep_time = 1
+
+set editor = $EDITOR
+set timeout = "5"
+set mail_check = "10"
+set date_format="%d %B %y %k:%M"
+set index_format="%2C %Z %?X?A& ? %D %-15.15F %s (%-4.4c)"
+set sort = 'reverse-date'
+set sort=threads
+set text_flowed=yes
+
+macro compose \e5 "F pandoc -s -f markdown -t html \ny^T^Utext/html; charset=us-ascii\n"
+set wait_key=no
+
+bind index U imap-fetch-mail
+
+# General remappings
+bind editor <space> noop
+bind index G last-entry
+bind index gg first-entry
+bind pager j next-line
+bind pager k previous-line
+bind pager gg top
+bind pager G bottom
+bind index d half-down
+bind index u half-up
+bind index D delete-message
+bind index U undelete-message
+bind index F search
+bind index,pager R group-reply
