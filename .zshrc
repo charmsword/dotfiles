@@ -1,6 +1,11 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 # If you come from bash you might have to change your $PATH.
 
+# Homebrew shell completion (needs to be before oh-my-zsh call)
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+fi
+
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/mac/.oh-my-zsh
 
@@ -123,9 +128,10 @@ alias cfr='vim ~/.config/ranger/rc.conf'
 #alias cfm='vim ~/.mpd/mpd.conf'
 alias cfn='vim ~/.ncmpcpp/config'
 alias cfz='vim ~/.zshrc'
-alias cfs='vim ~/.slate'
+#alias cfs='vim ~/.slate'
 alias cfm='vim ~/.config/mc/ini'
 alias cfabl='vim /Users/mac/Library/Preferences/Ableton/Live\ 9.2.3/options.txt'
+alias cfs='vim /Users/mac/Dropbox/Apps/neutriNote/CV/0_sprint.4_summer.19.md'
 
 # CLI APPS
 alias mus='ncmpcpp'
@@ -237,6 +243,13 @@ alias diff="git diff -U2000 --no-index --word-diff $1 $2"
 
 alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
 
+function gitp() {
+    git add .
+    git commit -a -m "$1"
+    git push
+}
+
+
 # DJVULIBRE path
 eval `/Applications/DjView.app/Contents/setpath.sh`
 # Convert djvu2pdf:
@@ -250,6 +263,8 @@ source ~/.cargo/env
 
 # BREW
 export HOMEBREW_NO_AUTO_UPDATE=1
+## troubleshooting brew cleanup
+alias brew cleanup="echo \"You don't want to do that. Just run 'cleanup' on specific packages, never on icu4c (this breaks vim) or boost (mpd, ncmpcpp)\""
 
 # mdmail
 #alias mdm="ranNum=$[RANDOM%998+1] bash -c 'vim ~/Dropbox/Apps/neutriNote/Appr/letters/letter_$ranNum.md'"
@@ -263,6 +278,10 @@ snorm() {
 		sox $file --norm=-0.1 ./NORM$file -V;
 	done
 }
+
+# CALIBRE
+
+alias calibre2ep="/Applications/calibre.app/Contents/MacOS/ebook-convert $1 $2 --dont-split-on-page-breaks --flow-size 260 --pretty-print"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
@@ -294,3 +313,5 @@ logo() {
                       (J'(set_color FF7F00)'JJ'(set_color F00)'| \UUU)
                        (UU)'(set_color normal) "
 	       }
+export PATH="/usr/local/opt/ruby/bin:$PATH"
+export PATH="/usr/local/opt/ruby/bin:$PATH"

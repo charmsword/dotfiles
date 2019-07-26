@@ -15,6 +15,9 @@ set gdefault
 set incsearch
 set showmatch
 set hlsearch
+" makes scrolling larger files faster:
+set lazyredraw
+set regexpengine=1
 "позволяет вводить LTR-языки, напр. иврит, с помощью <C-_>:
 set allowrevins
 " vim не требует сохранять буфер при переключении:
@@ -148,8 +151,8 @@ map <C-n> :NERDTreeToggle<CR>
 " ==================================================|
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 au BufNewFile,BufFilePre,BufRead *.txt set filetype=markdown
-au BufNewFile,BufRead * if &ft == '' | set ft=markdown | endif
-au BufNewFile,BufRead * if &syntax == '' | set syntax=markdown | endif
+"au BufNewFile,BufRead * if &ft == '' | set ft=markdown | endif
+"au BufNewFile,BufRead * if &syntax == '' | set syntax=markdown | endif
 autocmd BufNewFile,BufRead /tmp/mutt* set noautoindent filetype=markdown set syntax=markdown 
 autocmd BufNewFile,BufRead ~/tmp/mutt* set noautoindent filetype=markdown syntax=markdown 
 autocmd BufNewFile,BufRead /private/var/folders/dc/* set syntax=markdown setlocal fo+=aw
