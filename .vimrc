@@ -15,6 +15,8 @@ set gdefault
 set incsearch
 set showmatch
 set hlsearch
+" аббревиатура на открытие буфера в верт. сплите
+cnoreabbrev vb vert sb
 " makes scrolling larger files faster:
 set lazyredraw
 set regexpengine=1
@@ -23,9 +25,10 @@ set allowrevins
 " vim не требует сохранять буфер при переключении:
 set hidden
 "set path+=**
-:cd /Users/mac/Dropbox/Apps/neutriNote
+":cd /Users/mac/Dropbox/Apps/neutriNote
+:cd /Users/mac/NOTES
 """ директория файла становится рабочей директорией
-autocmd BufEnter * silent! lcd %:p:h
+"autocmd BufEnter * silent! lcd %:p:h
 nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 """inoremap <c-x> <c-x><c-f> – мешает в работе с .vim/keywords.txt
 """ несмотря на наличие --client-server XQuartz не будет запускаться вместе с vim:
@@ -117,19 +120,23 @@ inoremap <silent> <C-Down> <Esc><c-w>j
 nnoremap π "0p
 vnoremap π "0p
 
+"----- split sentences inside selection
+vnoremap <Space>sr :s/\.\s*/.\r/g<CR>
+
 "----- open in...
 vmap <Leader>op y:!open <C-r>0 -a Preview & disown<CR><CR>
 
 "----- RESIZING SPLITS
 nnoremap <Leader>= :vert res +10<Cr>
 nnoremap <Leader>- :vert res -10<Cr>
+nnoremap z= <C-w>=
 
 "}}}
 "{{{ COLORSCHEME==================================================
 "=================================================================
 " set background=light           
 " colorscheme simplifysimplify-light
-" colorscheme pyte
+" colorscheme default
 set laststatus=2
 " let g:lightline = {
 "       \ 'colorscheme': 'solarized',
@@ -150,7 +157,7 @@ map <C-n> :NERDTreeToggle<CR>
 " ==================================================|
 " ==================================================|
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
-au BufNewFile,BufFilePre,BufRead *.txt set filetype=markdown
+"au BufNewFile,BufFilePre,BufRead *.txt set filetype=markdown
 "au BufNewFile,BufRead * if &ft == '' | set ft=markdown | endif
 "au BufNewFile,BufRead * if &syntax == '' | set syntax=markdown | endif
 autocmd BufNewFile,BufRead /tmp/mutt* set noautoindent filetype=markdown set syntax=markdown 
@@ -411,7 +418,7 @@ nnoremap <Leader>pt :! pandoc -f markdown -t latex --biblatex --wrap=preserve --
 nnoremap <Leader>pwe :! pandoc --filter pandoc-crossref --filter pantable --filter pandoc-citeproc --bibliography=/Users/mac/Dropbox/Apps/neutriNote/bib/Aspiro_1.8.bib --reference-doc /Users/mac/Dropbox/Apps/neutriNote/Aspiro/demo-template-report_mine.docx -f markdown+smart -t docx+styles -s --csl /Users/mac/Dropbox/Apps/neutriNote/css/chicago-fullnote-bibliography-with-ibid.csl -o /Users/mac/Documents/%:r.docx % /Users/mac/Dropbox/Apps/neutriNote/Aspiro/dis_4.0/md-gost.yaml
 nnoremap <Leader>pwr :! pandoc --filter pandoc-crossref --filter pantable --filter pandoc-citeproc --bibliography=/Users/mac/Dropbox/Apps/neutriNote/bib/Aspiro_1.8.bib --reference-doc /Users/mac/Dropbox/Apps/neutriNote/Aspiro/demo-template-report_mine.docx -f markdown+smart -t docx+styles -s --csl /Users/mac/Downloads/GOST-styles-for-Zotero/gost-r-7-0-5-2008-footnote-appear.csl -o /Users/mac/Documents/%:r.docx % /Users/mac/Dropbox/Apps/neutriNote/Aspiro/dis_4.0/md-gost.yaml
 """ ЭТО ДЛЯ thesis:
-nnoremap <Leader>pwf :! pandoc --filter pandoc-crossref --filter pantable --filter pandoc-citeproc --bibliography=/Users/mac/Dropbox/Apps/neutriNote/bib/Aspiro_1.8.bib --reference-doc /Users/mac/Dropbox/Apps/neutriNote/Aspiro/demo-template-report_mine.docx -f markdown+smart -t docx -s --csl /Users/mac/Dropbox/Apps/neutriNote/csl/gost-r-7-0-5-2008-foot-alphab-ru-en.csl -o /Users/mac/Documents/%:r.docx % /Users/mac/Dropbox/Apps/neutriNote/Aspiro/md-gost_thesis.yaml
+nnoremap <Leader>pwf :! pandoc --filter pandoc-crossref --filter pantable --filter pandoc-citeproc --bibliography=/Users/mac/Dropbox/Apps/neutriNote/bib/Aspiro_1.8.bib --bibliography=/Users/mac/Dropbox/Apps/neutriNote/bib/SFI_1.0.bib --reference-doc /Users/mac/Dropbox/Apps/neutriNote/Aspiro/demo-template-report_mine.docx -f markdown+smart -t docx -s --csl /Users/mac/Dropbox/Apps/neutriNote/csl/gost-r-7-0-5-2008-foot-alphab-ru-en.csl -o /Users/mac/Documents/%:r.docx % /Users/mac/Dropbox/Apps/neutriNote/Aspiro/md-gost_thesis.yaml
 nnoremap <Leader>pwn :! pandoc --filter pandoc-crossref --filter pantable --filter pandoc-citeproc --bibliography=/Users/mac/Dropbox/Apps/neutriNote/bib/Aspiro_1.8.bib --reference-doc /Users/mac/Dropbox/Apps/neutriNote/Aspiro/demo-template-report_mine.docx -f markdown+smart -t docx -s --csl /Users/mac/Dropbox/Apps/neutriNote/csl/gost-r-7-0-5-2008-numeric-alphab-ru-en.csl -o /Users/mac/Documents/%:r.docx % /Users/mac/Dropbox/Apps/neutriNote/Aspiro/md-gost_article.yaml
 nnoremap <Leader>pwa :! pandoc --filter pandoc-crossref --filter pantable --filter pandoc-citeproc --bibliography=/Users/mac/Dropbox/Apps/neutriNote/bib/Aspiro_1.8.bib --reference-doc /Users/mac/Dropbox/Apps/neutriNote/Aspiro/demo-template-report_mine.docx -f markdown+smart -t docx -s --csl /Users/mac/Dropbox/Apps/neutriNote/csl/gost-r-7-0-5-2008-numeric-appear-ru-en.csl -o /Users/mac/Documents/%:r.docx % /Users/mac/Dropbox/Apps/neutriNote/Aspiro/md-gost_article.yaml
 """ создание транслит. библиографии в стиле Chicago
@@ -475,6 +482,7 @@ inoremap lT \time<Space>/4<Space><++><Esc>Fela
 inoremap дЕ \time<Space>/4<Space><++><Esc>Fela
 
 "------ LILYPOND MINE COMMANDS
+"lchdir %:p:h переключает рабочую директорию на директорию файла
 nnoremap <Leader>lp :lchdir %:p:h<CR>:! lilypond -fpng -dinclude-settings='../SETTINGS.ly' -dresolution=300 -o ./%:r % && convert -trim %:p:r.png %:p:r.png<CR>
 nnoremap <Leader>lf :lchdir %:p:h<CR>:! lilypond -dclip-systems -fpng -dresolution=300 -o ./%:r % && convert -trim %:p:r.png %:p:r.png<CR>
 
@@ -483,6 +491,29 @@ inoremap <Leader>l% %--------------------bar1<Space><ESC>:let @a=1 <bar> %s/bar\
 
 "}}}
 "{{{ FUNCTIONS = = = = = = = = = = = = = = = = = = = = = = = = = 
+"-----Linebreak functions
+" Insert a newline after each specified string (or before if use '!').
+" If no arguments, use previous search.
+command! -bang -nargs=* -range LineBreakAt <line1>,<line2>call LineBreakAt('<bang>', <f-args>)
+function! LineBreakAt(bang, ...) range
+  let save_search = @/
+  if empty(a:bang)
+    let before = ''
+    let after = '\ze.'
+    let repl = '&\r'
+  else
+    let before = '.\zs'
+    let after = ''
+    let repl = '\r&'
+  endif
+  let pat_list = map(deepcopy(a:000), "escape(v:val, '/\\.*$^~[')")
+  let find = empty(pat_list) ? @/ : join(pat_list, '\|')
+  let find = before . '\%(' . find . '\)' . after
+  " Example: 10,20s/\%(arg1\|arg2\|arg3\)\ze./&\r/ge
+  execute a:firstline . ',' . a:lastline . 's/'. find . '/' . repl . '/ge'
+  let @/ = save_search
+endfunction
+
 "-----Ranger calling
 function! Ranger()
     " Get a temp file name without creating it
@@ -529,7 +560,12 @@ autocmd BufReadPost quickfix nnoremap <CR> <CR>
 let g:org_todo_keywords = [['NEXT(n)', 'PROJECT', 'PEND', '•••', '|', 'DONE(d)', 'FRZN', 'PRJCT', '...'],
       \ ['skt4(s)', 'comp(p)', 'mix(m)', '|', 'composed(c)']]
 
+"---------- FZF INTEGRATION
+"this needed to enable plugin work correctly
+set rtp+=/usr/local/opt/fzf
 
+"enable history (C-p, C-n to lookup in history)
+"let g:fzf_history_dir = '~/.local/share/fzf-history'
 
 "--------- COMFORTABLE SCROLLING IN VIM PLUGIN
 let g:comfortable_motion_no_default_key_mappings = 1

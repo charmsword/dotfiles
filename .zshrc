@@ -111,15 +111,15 @@ alias cl='clear'
 
 # DIRECTORIES
 
-alias h='cd ~/'
-alias m='cd ~/Music'
-alias d='cd ~/Documents'
-alias p='cd ~/Pictures'
-alias v='cd ~/Dropbox/Apps/neutriNote'
+alias gm='cd ~/Music'
+alias gd='cd ~/Documents'
+alias gp='cd ~/Pictures'
+alias gn='cd ~/Dropbox/Apps/neutriNote'
+alias vv='cd ~/NOTES/'
 alias ww='cd ~/Dropbox/DOCS/wetwork'
 alias vm='cd /Volumes/My\ Book/Media'
-alias vv='cd /Volumes'
-
+alias vol='cd /Volumes'
+alias cp='rsync --archive --human-readable --progress --verbose --whole-file'
 
 # CONFIGS
 alias cfb='vim ~/.bash_profile'
@@ -150,7 +150,11 @@ alias beets='beet'
 alias greml='grep -E -o "\b[a-zA-Z0-9.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+\b"' # *.md >> file.md
 #alias grek='grep -E -o "[0-9a-zA-Z-]+\.[0-9a-zA-Z-]+\.[0-9]+" ~/Dropbox/Apps/neutriNote/bib/Aspiro_1.8.bib | sort | uniq > ~/.vim/keywords.txt'
 
-alias grek='grep -E -o "[0-9a-zA-Z-]+\.[0-9a-zA-Z-]+\.[0-9]+" ~/Dropbox/Apps/neutriNote/bib/Aspiro_1.8.bib | sort | uniq > ~/.vim/keywords.txt && rg -oN --no-filename "\{\#[^\d|\#|}]+\}" ~/Dropbox/Apps/neutriNote/Aspiro/dis_4.0/* | sed s/#// | sort | uniq > ~/.vim/references.txt'
+# -h нужно, чтобы при grep'е нескольких файлов strings не предварялись названиями файлов
+alias grek='grep -h -E -o "[0-9a-zA-Z-]+\.[0-9a-zA-Z-]+\.[0-9]+" ~/Dropbox/Apps/neutriNote/bib/Aspiro_1.8.bib ~/Dropbox/Apps/neutriNote/bib/SFI_1.0.bib | sort | uniq > ~/.vim/keywords.txt'
+
+## эта часть понадобится для references (ссылок на главы и разделы), но я пока это не использую:
+## ~/Dropbox/Apps/neutriNote/bib/SFI_1.0.bib && rg -oN --no-filename "\{\#[^\d|\#|}]+\}" ~/Dropbox/Apps/neutriNote/Aspiro/dis_4.0/* | sed s/#// | sort | uniq > ~/.vim/references.txt'
 
 alias awtime='awk -F "," "{print \$2,\$5,\$4,\$8, \$9, \$10, \$11,\$12}"'
 
@@ -207,6 +211,12 @@ fbatch () {
     rm -I "*.$1"
 }
 
+# extracting audio f video
+function ffstrip() { ffmpeg -i "$1"  -vn -acodec copy "$2" }
+
+# extracting from particular timestamp (формат: -ss 00:03:05 -t 00:00:45.0)
+function ffsstrip() { ffmpeg -i "$3"  -vn -acodec copy -ss "$1" -t "$2" "$4" }
+
 alias ffmbatch="/bin/ffmpeg-batch.sh"
 
 
@@ -260,6 +270,17 @@ export PATH="/usr/local/sbin:$PATH"
 source ~/.cargo/env
 
 # VIM ALIASES
+#alias virg='vim `rg -l "$1" | fzf` -c "set foldlevel=1000 | /$1"'
+
+function virg() {
+	SEARCH="$(rg -l $1 | fzf -m --height 96% --reverse --preview "cat {}")" &&
+		vim `echo ${SEARCH}` -O -c "set foldlevel=1000 | /$1"
+}
+
+function vif() {
+	SEARCH="$(fzf -m --height 96% --reverse --preview "cat {}")" &&
+		vim `echo ${SEARCH}` -c "set foldlevel=1000 | /$1"
+}
 
 # BREW
 export HOMEBREW_NO_AUTO_UPDATE=1
@@ -315,3 +336,10 @@ logo() {
 	       }
 export PATH="/usr/local/opt/ruby/bin:$PATH"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --no-ignore-vcs'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_COMPLETION_TRIGGER='~~'
+export FZF_DEFAULT_OPTS='--height 96% --reverse --preview "cat {}"'

@@ -1,9 +1,11 @@
 set imap_user = "charmsword@gmail.com"
 set imap_pass = "VladimirPlatanovBloom17"
+#to send mail:
 set smtp_url = "smtp://charmsword@smtp.gmail.com:587/"
 set smtp_pass = "VladimirPlatanovBloom17"
 set from = "charmsword@gmail.com"
 set realname = "Alexander Tavrizyan"
+#to recieve mail:
 set folder = "imaps://imap.gmail.com:993"
 set spoolfile = "+INBOX"
 set record = "+Sent"
@@ -18,6 +20,7 @@ set smtp_authenticators = 'gssapi:login'
 mailboxes =INBOX =Sent =Trash =Drafts
 
 source ~/.mutt/mutt-colors-solarized/mutt-colors-solarized-light-16.muttrc
+#source color.muttrc
 
 #Specifies time, in seconds, to pause while displaying certain informational messages, while moving from folder to folder and after expunging messages from the current folder. The default is to pause one second, so a value of zero for this option suppresses the pause.
 set sleep_time = 1
@@ -35,6 +38,12 @@ macro compose \e5 "F pandoc -s -f markdown -t html \ny^T^Utext/html; charset=us-
 set wait_key=no
 
 bind index U imap-fetch-mail
+
+# SIDEBAR
+#set up the sidebar, default not visible
+set sidebar_width=12
+set sidebar_visible=yes
+set sidebar_delim='|'
 
 # General remappings
 bind editor <space> noop
