@@ -16,7 +16,7 @@ set message_cachedir = ~/.mutt/cache/bodies
 set certificate_file = ~/.mutt/certificates
 set move = no
 set smtp_authenticators = 'gssapi:login'
-
+#test
 mailboxes =INBOX =Sent =Trash =Drafts
 
 source ~/.mutt/mutt-colors-solarized/mutt-colors-solarized-light-16.muttrc
