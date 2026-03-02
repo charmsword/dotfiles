@@ -1,3 +1,7 @@
+---
+type: Checklist
+---
+
 ## this is a test 
 
 - GTD check
