@@ -1,7 +1,7 @@
 " {{{ PATHOGEN
 execute pathogen#infect()
 filetype plugin on
-
+test
 "}}} 
 " {{{BASICS=========================================
 " ==================================================
